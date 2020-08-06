@@ -50,7 +50,7 @@ class App extends Component {
             <Redirect to='/feed' />
           )} />
           <Route exact path='/feed' render={() => (
-            <Feed />
+            <Feed token={this.state.user ? this.state.user.token : null} msgAlert={this.msgAlert} />
           )} />
           <Route path='/posts/:id' render={(props) => (
             <PostPage routeprops={props}/>

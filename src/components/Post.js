@@ -23,7 +23,6 @@ const Post = (props) => {
     fontWeight: '500'
   }
 
-  console.log(props)
   return (
     <div style={postBoxStyle} onClick={handleClick}>
       <small>Posted by {props.author.email}</small>

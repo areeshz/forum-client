@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 
+import apiUrl from './../apiConfig.js'
+
 const CreatePostForm = (props) => {
+  const { msgAlert } = props
   const [post, setPost] = useState({
     title: '',
     body: ''
@@ -12,7 +16,6 @@ const CreatePostForm = (props) => {
 
   const handleInputChange = (event) => {
     event.preventDefault()
-    console.log(post)
     const updatedField = { [event.target.name]: event.target.value }
     setPost({ ...post, ...updatedField })
   }
@@ -25,6 +28,39 @@ const CreatePostForm = (props) => {
     })
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    console.log('ready to submit, here is the data', post)
+
+    axios({
+      method: 'POST',
+      url: apiUrl + '/posts/',
+      headers: {
+        Authorization: `Token ${props.token}`
+      },
+      data: {
+        post: post
+      }
+    })
+      .then(() => {
+        handleClose()
+        msgAlert({
+          heading: 'Posted Successfully',
+          message: 'Your post has been added to the forum!',
+          variant: 'success'
+        })
+        props.setRefresh(!props.refresh)
+      })
+      .catch(console.error)
+  }
+
+  const modalFooterStyle = {
+    paddingBottom: '0',
+    paddingLeft: '0',
+    paddingRight: '0'
+  }
+
   return (
     <div>
       <Modal show={props.show} onHide={handleClose} size="lg">
@@ -32,7 +68,7 @@ const CreatePostForm = (props) => {
           <Modal.Title>Create a Post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Post Title</Form.Label>
               <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} />
@@ -42,19 +78,16 @@ const CreatePostForm = (props) => {
               <Form.Label>Post Body</Form.Label>
               <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={post.body} onChange={handleInputChange} />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+            <Modal.Footer style={modalFooterStyle}>
+              <Button variant="secondary" onClick={handleClose}>
+                CANCEL
+              </Button>
+              <Button variant="primary" type="submit">
+                POST
+              </Button>
+            </Modal.Footer>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            CANCEL
-          </Button>
-          <Button variant="primary" type="submit">
-            POST
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   )
