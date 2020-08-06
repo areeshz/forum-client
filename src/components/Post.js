@@ -7,6 +7,7 @@ import apiUrl from './../apiConfig.js'
 const Post = (props) => {
   const { user, msgAlert } = props
   const [show, setShow] = useState(null)
+  const [edit, setEdit] = useState(null)
 
   const handleClick = () => {
     setShow(true)
@@ -18,7 +19,8 @@ const Post = (props) => {
     margin: '20px auto',
     padding: '10px 20px 10px 20px',
     borderRadius: '7px',
-    maxWidth: '80vw'
+    maxWidth: '80vw',
+    cursor: 'pointer'
   }
 
   const titleStyle = {
@@ -31,6 +33,10 @@ const Post = (props) => {
     display: 'inline-block',
     marginLeft: '10px',
     marginRight: '10px'
+  }
+
+  const bodyStyle = {
+    whiteSpace: 'pre-wrap'
   }
 
   const deleteHandler = (event) => {
@@ -64,6 +70,7 @@ const Post = (props) => {
     event.stopPropagation()
 
     console.log('editing time')
+    setEdit(true)
   }
 
   return (
@@ -74,8 +81,20 @@ const Post = (props) => {
         <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
       </React.Fragment>}
       <p style={titleStyle}>{props.title}</p>
-      <p>{props.body}</p>
-      { show && <Redirect to={`/posts/${props.postid}`} />}
+      <p style={bodyStyle}>{props.body}</p>
+      { show && <Redirect to={{
+        pathname: `/posts/${props.postid}`,
+        state: { version: 'showing' }
+      }}
+      />}
+      { edit && <Redirect to={{
+        pathname: `/posts/${props.postid}`,
+        state: {
+          version: 'editing',
+          user: user
+        }
+      }}
+      />}
     </div>
   )
 }

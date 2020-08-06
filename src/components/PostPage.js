@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
+import PostEdit from './PostEdit'
+
 const PostPage = (props) => {
   const postId = props.routeprops.match.params.id
   const [post, setPost] = useState(null)
+  const [version, setVersion] = useState((props.routeprops && props.routeprops.location.state) ? props.routeprops.location.state.version : 'showing')
+  console.log(setVersion)
 
   useEffect(() => {
+    console.log('props are', props)
     axios({
       method: 'GET',
       url: apiUrl + '/feed/' + postId
@@ -28,17 +33,18 @@ const PostPage = (props) => {
   }
 
   const bodyStyle = {
-    color: 'black'
+    whiteSpace: 'pre-wrap'
   }
 
   return (
     <div>
       {!post && <h1>Loading...</h1>}
-      {post && <div style={postBoxStyle}>
+      {post && (version === 'showing') && <div style={postBoxStyle}>
         <small>Posted by {post.owner.email}</small>
         <p style={titleStyle}>{post.title}</p>
         <p style={bodyStyle}>{post.body}</p>
       </div>}
+      {post && (version === 'editing') && <PostEdit title={post.title} body={post.body} user={props.user} />}
     </div>
   )
 }
