@@ -59,12 +59,13 @@ const Feed = (props) => {
 
   return (
     <div>
-      <CreatePostButton handleShow={handleShow}/>
-      { !posts && <h1>Loading...</h1>}
-      {posts && <h1>Got some posts, one by {posts[0].owner.email}</h1>}
-      { posts && posts.map(post => (
-        <Post key={post.id} title={post.title} author={post.owner} body={post.body} postid={post.id} />
-      ))}
+      { !posts && <h1 style={{ textAlign: 'center' }}>Loading Feed...</h1>}
+      { posts && <React.Fragment>
+        <CreatePostButton handleShow={handleShow}/>
+        {posts.map(post => (
+          <Post key={post.id} title={post.title} author={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} />
+        ))}
+      </React.Fragment>}
       <CreatePostForm show={show} handleClose={handleClose} token={props.token} setRefresh={setRefresh} refresh={refresh} msgAlert={msgAlert}/>
     </div>
   )
