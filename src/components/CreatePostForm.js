@@ -5,29 +5,24 @@ import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 
 const CreatePostForm = (props) => {
-  const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
+  const [post, setPost] = useState({
+    title: '',
+    body: ''
+  })
 
-  const handleTitleChange = (event) => {
+  const handleInputChange = (event) => {
     event.preventDefault()
-    console.log(title)
-
-    const newTitle = event.target.value
-    setTitle(newTitle)
-  }
-
-  const handleBodyChange = (event) => {
-    event.preventDefault()
-    console.log(body)
-
-    const newBody = event.target.value
-    setBody(newBody)
+    console.log(post)
+    const updatedField = { [event.target.name]: event.target.value }
+    setPost({ ...post, ...updatedField })
   }
 
   const handleClose = () => {
     props.handleClose()
-    setTitle('')
-    setBody('')
+    setPost({
+      title: '',
+      body: ''
+    })
   }
 
   return (
@@ -40,12 +35,12 @@ const CreatePostForm = (props) => {
           <Form>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Post Title</Form.Label>
-              <Form.Control type="text" placeholder="Title" name="title" value={title} onChange={handleTitleChange} />
+              <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} />
             </Form.Group>
 
             <Form.Group controlId="formBasicBody">
               <Form.Label>Post Body</Form.Label>
-              <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={body} onChange={handleBodyChange} />
+              <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={post.body} onChange={handleInputChange} />
             </Form.Group>
             <Button variant="primary" type="submit">
               Submit
