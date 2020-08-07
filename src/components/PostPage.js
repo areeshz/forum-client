@@ -5,6 +5,7 @@ import apiUrl from './../apiConfig.js'
 import Button from 'react-bootstrap/Button'
 
 import PostEdit from './PostEdit'
+import CommentSection from './CommentSection'
 
 const PostPage = (props) => {
   const postId = props.routeprops.match.params.id
@@ -67,8 +68,11 @@ const PostPage = (props) => {
 
   const postBoxStyle = {
     border: '1px solid black',
-    marginTop: '25px',
-    padding: '10px'
+    margin: '25px auto 0',
+    padding: '10px',
+    width: '700px',
+    maxWidth: '80vw',
+    borderRadius: '7px'
   }
 
   const titleStyle = {
@@ -100,6 +104,7 @@ const PostPage = (props) => {
       </div>}
       {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} msgAlert={props.msgAlert} />}
       {deleted && <Redirect to="/feed"/>}
+      <CommentSection post={post} />
     </div>
   )
 }
