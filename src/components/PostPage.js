@@ -8,7 +8,6 @@ const PostPage = (props) => {
   const postId = props.routeprops.match.params.id
   const [post, setPost] = useState(null)
   const [version, setVersion] = useState((props.routeprops && props.routeprops.location.state) ? props.routeprops.location.state.version : 'showing')
-  console.log(setVersion)
 
   useEffect(() => {
     console.log('props are', props)
@@ -20,7 +19,7 @@ const PostPage = (props) => {
         setPost(response.data)
       })
       .catch(console.error)
-  }, [])
+  }, [version])
 
   const postBoxStyle = {
     border: '1px solid black',
@@ -44,7 +43,7 @@ const PostPage = (props) => {
         <p style={titleStyle}>{post.title}</p>
         <p style={bodyStyle}>{post.body}</p>
       </div>}
-      {post && (version === 'editing') && <PostEdit title={post.title} body={post.body} user={props.user} />}
+      {post && (version === 'editing') && <PostEdit post={post} user={props.routeprops.location.state.user} setVersion={setVersion} setPost={setPost} />}
     </div>
   )
 }

@@ -84,14 +84,19 @@ const Post = (props) => {
       <p style={bodyStyle}>{props.body}</p>
       { show && <Redirect to={{
         pathname: `/posts/${props.postid}`,
-        state: { version: 'showing' }
+        state: {
+          version: 'showing',
+          user: user,
+          msgAlert: msgAlert
+        }
       }}
       />}
       { edit && <Redirect to={{
         pathname: `/posts/${props.postid}`,
         state: {
           version: 'editing',
-          user: user
+          user: user,
+          msgAlert: msgAlert
         }
       }}
       />}
