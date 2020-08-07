@@ -61,7 +61,7 @@ const Feed = (props) => {
       { posts && <React.Fragment>
         <CreatePostButton handleShow={handleShow}/>
         {posts.map(post => (
-          <Post key={post.id} title={post.title} author={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} post={post} />
+          <Post key={post.id} title={post.title} owner={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} post={post} />
         ))}
       </React.Fragment>}
       <CreatePostForm show={show} handleClose={handleClose} token={props.token} setRefresh={setRefresh} refresh={refresh} msgAlert={msgAlert}/>

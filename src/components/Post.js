@@ -16,7 +16,7 @@ const Post = (props) => {
   const postBoxStyle = {
     border: '1px solid black',
     width: '500px',
-    margin: '20px auto',
+    margin: '20px auto 0 auto',
     padding: '10px 20px 10px 20px',
     borderRadius: '7px',
     maxWidth: '80vw',
@@ -75,9 +75,9 @@ const Post = (props) => {
 
   return (
     <div style={postBoxStyle} onClick={handleClick}>
-      <small>Posted by {props.author.email}</small>
+      <small>Posted by {props.owner.email}</small>
       { (props.post.created_at.slice(0, 22)) !== (props.post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
-      { user && (user.id === props.author.id) && <React.Fragment>
+      { user && (user.id === props.owner.id) && <React.Fragment>
         <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
         <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
       </React.Fragment>}

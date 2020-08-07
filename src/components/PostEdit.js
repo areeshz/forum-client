@@ -66,7 +66,7 @@ const PostEdit = (props) => {
           <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={post.body} onChange={handleInputChange} />
         </Form.Group>
         <Button variant="primary" type="submit">
-          POST
+          Save Changes
         </Button>
       </Form>
     </div>
