@@ -104,7 +104,7 @@ const PostPage = (props) => {
       </div>}
       {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} msgAlert={props.msgAlert} />}
       {deleted && <Redirect to="/feed"/>}
-      <CommentSection post={post} />
+      <CommentSection post={post} msgAlert={props.msgAlert} user={props.user} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Comment from './Comment'
+import CreateCommentForm from './CreateCommentForm'
 
 const CommentSection = (props) => {
   const headingStyle = {
@@ -17,6 +18,7 @@ const CommentSection = (props) => {
     <div style={commentSectionStyle}>
       {console.log(props)}
       <h2 style={headingStyle}>Comments</h2>
+      {props.post && <CreateCommentForm post={props.post} user={props.user} />}
       {props.post && props.post.comments.map((comment, index) => (
         <Comment key={index} comment={comment} />
       ))}
