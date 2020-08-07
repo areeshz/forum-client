@@ -8,7 +8,6 @@ const Comment = (props) => {
     width: '500px',
     maxWidth: '80vw',
     padding: '10px 15px',
-    marginBottom: '12px',
     marginTop: '12px'
   }
 

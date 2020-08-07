@@ -12,6 +12,7 @@ const PostPage = (props) => {
   const [post, setPost] = useState(null)
   const [version, setVersion] = useState((props.routeprops && props.routeprops.location.state) ? props.routeprops.location.state.version : 'showing')
   const [deleted, setDeleted] = useState(false)
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     console.log('props are', props)
@@ -29,7 +30,7 @@ const PostPage = (props) => {
           variant: 'danger'
         })
       })
-  }, [version])
+  }, [version, refresh])
 
   const deleteHandler = (event) => {
     event.stopPropagation()
@@ -104,7 +105,7 @@ const PostPage = (props) => {
       </div>}
       {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} msgAlert={props.msgAlert} />}
       {deleted && <Redirect to="/feed"/>}
-      <CommentSection post={post} msgAlert={props.msgAlert} user={props.user} />
+      {post && version === 'showing' && <CommentSection post={post} msgAlert={props.msgAlert} user={props.user} postPageRefresh={refresh} setPostPageRefresh={setRefresh} />}
     </div>
   )
 }

@@ -11,14 +11,16 @@ const CommentSection = (props) => {
   const commentSectionStyle = {
     margin: '25px auto 0',
     width: '700px',
-    maxWidth: '80vw'
+    maxWidth: '80vw',
+    paddingBottom: '12px'
   }
 
   return (
     <div style={commentSectionStyle}>
       {console.log(props)}
       <h2 style={headingStyle}>Comments</h2>
-      {props.post && <CreateCommentForm post={props.post} user={props.user} />}
+      {props.post && <CreateCommentForm post={props.post} user={props.user} msgAlert={props.msgAlert} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} />}
+      {console.log('this is the post', props.post)}
       {props.post && props.post.comments.map((comment, index) => (
         <Comment key={index} comment={comment} />
       ))}
