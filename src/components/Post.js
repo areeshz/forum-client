@@ -76,6 +76,7 @@ const Post = (props) => {
   return (
     <div style={postBoxStyle} onClick={handleClick}>
       <small>Posted by {props.author.email}</small>
+      { (props.post.created_at.slice(0, 22)) !== (props.post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
       { user && (user.id === props.author.id) && <React.Fragment>
         <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
         <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>

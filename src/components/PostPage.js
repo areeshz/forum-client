@@ -46,6 +46,7 @@ const PostPage = (props) => {
       {!post && <h1>Loading...</h1>}
       {post && (version === 'showing') && <div style={postBoxStyle}>
         <small>Posted by {post.owner.email}</small>
+        { (post.created_at.slice(0, 22)) !== (post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
         <p style={titleStyle}>{post.title}</p>
         <p style={bodyStyle}>{post.body}</p>
       </div>}

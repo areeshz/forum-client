@@ -22,7 +22,11 @@ const Feed = (props) => {
       url: apiUrl + '/feed'
     })
       .then(response => {
-        setPosts(response.data.reverse())
+        // sorts the posts with newest first
+        const sortedPosts = [...response.data].sort((a, b) => {
+          return b.id - a.id
+        })
+        setPosts(sortedPosts)
       })
       .catch(() => {
         msgAlert({
@@ -57,7 +61,7 @@ const Feed = (props) => {
       { posts && <React.Fragment>
         <CreatePostButton handleShow={handleShow}/>
         {posts.map(post => (
-          <Post key={post.id} title={post.title} author={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} />
+          <Post key={post.id} title={post.title} author={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} post={post} />
         ))}
       </React.Fragment>}
       <CreatePostForm show={show} handleClose={handleClose} token={props.token} setRefresh={setRefresh} refresh={refresh} msgAlert={msgAlert}/>
