@@ -43,7 +43,7 @@ const PostPage = (props) => {
         <p style={titleStyle}>{post.title}</p>
         <p style={bodyStyle}>{post.body}</p>
       </div>}
-      {post && (version === 'editing') && <PostEdit post={post} user={props.routeprops.location.state.user} setVersion={setVersion} setPost={setPost} />}
+      {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} />}
     </div>
   )
 }
