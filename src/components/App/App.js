@@ -53,7 +53,7 @@ class App extends Component {
             <Feed token={this.state.user ? this.state.user.token : null} user={this.state.user} msgAlert={this.msgAlert} />
           )} />
           <Route path='/posts/:id' render={(props) => (
-            <PostPage routeprops={props} user={user}/>
+            <PostPage routeprops={props} user={user} msgAlert={this.msgAlert}/>
           )}/>
           <Route path='/sign-up' render={() => (
             <SignUp msgAlert={this.msgAlert} setUser={this.setUser} />

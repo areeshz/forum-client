@@ -64,6 +64,9 @@ class SignUp extends Component {
                 placeholder="Enter email"
                 onChange={this.handleChange}
               />
+              <Form.Text className="text-muted">
+                We&#39;ll never share your email with anyone else.
+              </Form.Text>
             </Form.Group>
             <Form.Group controlId="password">
               <Form.Label>Password</Form.Label>
@@ -75,6 +78,9 @@ class SignUp extends Component {
                 placeholder="Password"
                 onChange={this.handleChange}
               />
+              <Form.Text className="text-muted">
+                Must be at least 5 characters.
+              </Form.Text>
             </Form.Group>
             <Form.Group controlId="passwordConfirmation">
               <Form.Label>Password Confirmation</Form.Label>

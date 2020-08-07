@@ -14,18 +14,6 @@ const Feed = (props) => {
   const [posts, setPosts] = useState(null)
   const [refresh, setRefresh] = useState(false)
 
-  // // To be run upon component mounting
-  // useEffect(() => {
-  //   axios({
-  //     method: 'GET',
-  //     url: apiUrl + '/feed'
-  //   })
-  //     .then(response => {
-  //       setPosts(response.data)
-  //     })
-  //     .catch(console.error)
-  // }, [])
-
   // To be run upon  mount and upon closing of 'create post' modal
   useEffect(() => {
     console.log('CHANGE')
@@ -36,7 +24,13 @@ const Feed = (props) => {
       .then(response => {
         setPosts(response.data.reverse())
       })
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Unable to load posts.',
+          message: 'Something went wrong, please try again later.',
+          variant: 'danger'
+        })
+      })
   }, [refresh])
 
   const [show, setShow] = useState(false)

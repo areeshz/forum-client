@@ -52,7 +52,13 @@ const CreatePostForm = (props) => {
         })
         props.setRefresh(!props.refresh)
       })
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Unable to post.',
+          message: 'Something went wrong, please try again later.',
+          variant: 'danger'
+        })
+      })
   }
 
   const modalFooterStyle = {
@@ -71,12 +77,12 @@ const CreatePostForm = (props) => {
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicTitle">
               <Form.Label>Post Title</Form.Label>
-              <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} />
+              <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} required />
             </Form.Group>
 
             <Form.Group controlId="formBasicBody">
               <Form.Label>Post Body</Form.Label>
-              <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={post.body} onChange={handleInputChange} />
+              <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={post.body} onChange={handleInputChange} required />
             </Form.Group>
             <Modal.Footer style={modalFooterStyle}>
               <Button variant="secondary" onClick={handleClose}>

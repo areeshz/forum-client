@@ -33,12 +33,23 @@ const PostEdit = (props) => {
     })
       .then((response) => {
         console.log('patch response is', response)
+        props.msgAlert({
+          heading: 'Post Updated',
+          message: 'Your post has been updated successfully.',
+          variant: 'success'
+        })
         props.setPost(response.data)
       })
       .then(() => {
         props.setVersion('showing')
       })
-      .catch(console.error)
+      .catch(() => {
+        props.msgAlert({
+          heading: 'Unable to update.',
+          message: 'Something went wrong. Please try again later.',
+          variant: 'danger'
+        })
+      })
   }
 
   return (

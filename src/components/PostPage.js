@@ -18,7 +18,13 @@ const PostPage = (props) => {
       .then((response) => {
         setPost(response.data)
       })
-      .catch(console.error)
+      .catch(() => {
+        props.msgAlert({
+          heading: 'Unable to load post.',
+          message: 'Something went wrong, please try again later.',
+          variant: 'danger'
+        })
+      })
   }, [version])
 
   const postBoxStyle = {
@@ -43,7 +49,7 @@ const PostPage = (props) => {
         <p style={titleStyle}>{post.title}</p>
         <p style={bodyStyle}>{post.body}</p>
       </div>}
-      {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} />}
+      {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} msgAlert={props.msgAlert} />}
     </div>
   )
 }
