@@ -6,9 +6,11 @@ import apiUrl from './../apiConfig.js'
 
 const Post = (props) => {
   const { user, msgAlert } = props
+  // States for determining if a user should be directed to the PostPage in showing mode or editing mode
   const [show, setShow] = useState(null)
   const [edit, setEdit] = useState(null)
 
+  // Sends user to the PostPage in showing mode
   const handleClick = () => {
     setShow(true)
   }
@@ -39,6 +41,7 @@ const Post = (props) => {
     whiteSpace: 'pre-wrap'
   }
 
+  // Handles 'delete post' request to back-end
   const deleteHandler = (event) => {
     event.stopPropagation()
 
@@ -49,6 +52,7 @@ const Post = (props) => {
         Authorization: `Token ${user.token}`
       }
     })
+      // Success alert box
       .then(() => {
         msgAlert({
           heading: 'Deleted Successfully',
@@ -57,6 +61,7 @@ const Post = (props) => {
         })
         props.setRefresh(!props.refresh)
       })
+      // Failure alert box
       .catch(() => {
         msgAlert({
           heading: 'Delete Unsuccessful',
@@ -66,13 +71,16 @@ const Post = (props) => {
       })
   }
 
+  // Sends user to the PostPage in editing mode
   const editHandler = (event) => {
     event.stopPropagation()
 
-    console.log('editing time')
     setEdit(true)
   }
 
+  // Renders post info (author, edit status, title, body)
+  // Renders edit and delete buttons if user is the owner of the post
+  // Sets up redirects to the PostPage component / route for 'showing mode' and 'editing mode'
   return (
     <div style={postBoxStyle} onClick={handleClick}>
       <small>Posted by {props.owner.email}</small>

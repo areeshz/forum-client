@@ -15,13 +15,15 @@ const CommentSection = (props) => {
     paddingBottom: '12px'
   }
 
+  // Sorts the comments with oldest comment first
   const sortedComments = [ ...props.post.comments ].sort((a, b) => {
     return a.id - b.id
   })
 
+  // Renders each Comment for the post
+  // Renders CreateCommentForm component if the user is signed in
   return (
     <div style={commentSectionStyle}>
-      {console.log(props)}
       <h2 style={headingStyle}>Comments</h2>
       {props.post && props.user &&
         <CreateCommentForm post={props.post} user={props.user} msgAlert={props.msgAlert} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} />

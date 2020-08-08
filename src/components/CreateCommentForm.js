@@ -8,31 +8,23 @@ import apiUrl from './../apiConfig'
 
 const CreateCommentButton = (props) => {
   const { user, msgAlert } = props
+
+  //  State to track the inputs in the create comment form
   const [comment, setComment] = useState({
     body: '',
     post: props.post.id
   })
 
+  // Handles changes to the form by updating the state
   const handleInputChange = (event) => {
     event.preventDefault()
     const updatedField = { [event.target.name]: event.target.value }
     setComment({ ...comment, ...updatedField })
   }
 
+  //  Handles 'create comment' request to back-end
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    if (!user) {
-      msgAlert({
-        heading: 'Please sign in to comment.',
-        variant: 'danger'
-      })
-      return
-    } else if (comment.body === '') {
-      return
-    }
-
-    console.log('time for axios', comment, user)
 
     axios({
       method: 'POST',
@@ -44,12 +36,14 @@ const CreateCommentButton = (props) => {
         comment
       }
     })
+      // Resets form upon success
       .then(() => {
         setComment({
           body: '',
           post: props.post.id
         })
       })
+      // Success alert box
       .then(() => {
         msgAlert({
           heading: 'Posted Successfully',
@@ -57,9 +51,11 @@ const CreateCommentButton = (props) => {
           variant: 'success'
         })
       })
+      // Refreshes PostPage component so latest comments are shown
       .then(() => {
         props.setPostPageRefresh(!props.postPageRefresh)
       })
+      // Failure alert box
       .catch(() => {
         msgAlert({
           heading: 'Unable to add comment.',
@@ -77,10 +73,10 @@ const CreateCommentButton = (props) => {
     borderRadius: '15px'
   }
 
+  // Render form for creating a comment
   return (
     <Form onSubmit={handleSubmit}>
-      {console.log('form post info', props.post)}
-      <Form.Control name="body" style={inputStyle} onChange={handleInputChange} placeholder="Write a Comment..." as="textarea" rows="2" value={comment.body} />
+      <Form.Control name="body" style={inputStyle} onChange={handleInputChange} placeholder="Write a Comment..." as="textarea" rows="2" value={comment.body} required />
       <Button variant="primary" type="submit">Submit</Button>
     </Form>
   )

@@ -8,27 +8,30 @@ import Form from 'react-bootstrap/Form'
 import apiUrl from './../apiConfig.js'
 
 const CommentEditForm = (props) => {
+  // States for keeping track of the modal form inputs
   const [newComment, setNewComment] = useState({
     body: props.currentComment.body,
     post: props.currentComment.post
   })
 
+  // Handles changes to the modal 'edit' form by updating the state
   const handleInputChange = (event) => {
     event.preventDefault()
     const updatedField = { [event.target.name]: event.target.value }
     setNewComment({ ...newComment, ...updatedField })
   }
 
+  // When the modal closes, reset the text boxes & state
   const handleClose = () => {
     props.handleClose()
     setNewComment({
       body: props.currentComment.body,
       post: props.currentComment.post
     })
-    console.log(newComment)
   }
 
-  //  To reorder things when an item is deleted
+  //  To maintain order of comments when a comment is deleted
+  // Reset the modal forms when a comment is deleted
   useEffect(() => {
     setNewComment({
       body: props.currentComment.body,
@@ -36,10 +39,9 @@ const CommentEditForm = (props) => {
     })
   }, [props])
 
+  // Handles 'update comment' request to back-end
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    console.log('ready to submit, here is the data', newComment, props.currentComment.id)
 
     axios({
       method: 'PATCH',
@@ -51,24 +53,26 @@ const CommentEditForm = (props) => {
         comment: newComment
       }
     })
+      // Upon success, closes modal and displays alert box
       .then((response) => {
-        console.log('response', response)
         handleClose()
         props.msgAlert({
           heading: 'Updated Successfully',
           message: 'Your comment has been updated.',
           variant: 'success'
         })
+        // Refreshes the PostPage component so that latest comment edits are shown
         props.setPostPageRefresh(!props.postPageRefresh)
         return response
       })
+      // Sets modal inputs and state to new comment values
       .then((response) => {
-        console.log('responseAgain', response)
         setNewComment({
           body: response.data.body,
           post: response.data.post
         })
       })
+      // Failure alert box
       .catch(() => {
         props.msgAlert({
           heading: 'Unable to update comment.',
@@ -84,6 +88,7 @@ const CommentEditForm = (props) => {
     paddingRight: '0'
   }
 
+  // Render modal with form for editing comments
   return (
     <div>
       <Modal show={props.show} onHide={handleClose}>

@@ -5,18 +5,14 @@ import CreatePostButton from './CreatePostButton'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
-// import Button from 'react-bootstrap/Button'
-// import Modal from 'react-bootstrap/Modal'
-// import Form from 'react-bootstrap/Form'
-
 const Feed = (props) => {
   const { msgAlert } = props
   const [posts, setPosts] = useState(null)
   const [refresh, setRefresh] = useState(false)
 
   // To be run upon  mount and upon closing of 'create post' modal
+  // Grabs the latest list of posts from the server and saves them in the state
   useEffect(() => {
-    console.log('CHANGE')
     axios({
       method: 'GET',
       url: apiUrl + '/posts'
@@ -28,6 +24,7 @@ const Feed = (props) => {
         })
         setPosts(sortedPosts)
       })
+      // Failure alert box for when posts cannot be fetched
       .catch(() => {
         msgAlert({
           heading: 'Unable to load posts.',
@@ -37,12 +34,15 @@ const Feed = (props) => {
       })
   }, [refresh])
 
+  // State for handling the view status of the 'create post' modal
   const [show, setShow] = useState(false)
 
   const handleClose = () => {
     setShow(false)
   }
 
+  // Changes state to show the 'create post' modal if the user is signed in
+  // Shows failure alert if user is not signed in and tries to create a post
   const handleShow = () => {
     if (props.token) {
       setShow(true)
@@ -55,6 +55,7 @@ const Feed = (props) => {
     }
   }
 
+  // Renders each post from the server, and the create post button and modal
   return (
     <div>
       { !posts && <h1 style={{ textAlign: 'center' }}>Loading Feed...</h1>}

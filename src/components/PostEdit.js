@@ -6,21 +6,22 @@ import axios from 'axios'
 import apiUrl from './../apiConfig'
 
 const PostEdit = (props) => {
+  // State to track the inputs in the edit post form
   const [post, setPost] = useState({
     title: props.post.title,
     body: props.post.body
   })
-  console.log('edit props are', props)
 
+  // Handles changes to the form by updating the state
   const handleInputChange = (event) => {
     event.preventDefault()
     const updatedField = { [event.target.name]: event.target.value }
     setPost({ ...post, ...updatedField })
   }
 
+  // Handles 'update post' request to back-end
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('time to submit changes')
     axios({
       method: 'PATCH',
       url: apiUrl + `/posts/${props.post.id}`,
@@ -31,8 +32,8 @@ const PostEdit = (props) => {
         post: post
       }
     })
+      // Success alert box & updates the state with the latest verion of the post
       .then((response) => {
-        console.log('patch response is', response)
         props.msgAlert({
           heading: 'Post Updated',
           message: 'Your post has been updated successfully.',
@@ -40,9 +41,11 @@ const PostEdit = (props) => {
         })
         props.setPost(response.data)
       })
+      // Changes component to 'showing' mode to display latest changes and remove the editing form
       .then(() => {
         props.setVersion('showing')
       })
+      // Failure alert box
       .catch(() => {
         props.msgAlert({
           heading: 'Unable to update.',
@@ -64,6 +67,7 @@ const PostEdit = (props) => {
     marginRight: '10px'
   }
 
+  // Renders form for editing a post
   return (
     <div>
       <h1>Editing: {props.post.title}</h1>

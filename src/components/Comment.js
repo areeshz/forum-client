@@ -9,14 +9,15 @@ import apiUrl from './../apiConfig'
 const Comment = (props) => {
   const { comment, msgAlert } = props
 
+  // State variable to track modal state (open or closed)
   const [show, setShow] = useState(false)
 
+  // Handlers to open and close the modal
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
+  // Handles 'delete comment' request to back-end
   const deleteHandler = () => {
-    console.log('time to delete')
-
     axios({
       method: 'DELETE',
       url: apiUrl + `/comments/${props.comment.id}`,
@@ -24,6 +25,7 @@ const Comment = (props) => {
         Authorization: `Token ${props.user.token}`
       }
     })
+      // Success alert box
       .then(() => {
         msgAlert({
           heading: 'Removed comment.',
@@ -31,9 +33,11 @@ const Comment = (props) => {
           variant: 'success'
         })
       })
+      // Refreshes PostPage component so deleted comment is no longer displayed
       .then(() => {
         props.setPostPageRefresh(!props.postPageRefresh)
       })
+      // Failure alert box
       .catch(() => {
         msgAlert({
           heading: 'Unable to remove comment.',
@@ -64,6 +68,9 @@ const Comment = (props) => {
     marginRight: '10px'
   }
 
+  // Render comment author, body, and edited status
+  // Render edit and delete buttons if user is the owner of the comment
+  // Render edit modal (CommentEditForm component) to be opened with the 'edit' button
   return (
     <div style={commentBoxStyle}>
       <small>{comment.owner.email}</small>

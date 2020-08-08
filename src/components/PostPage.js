@@ -8,21 +8,28 @@ import PostEdit from './PostEdit'
 import CommentSection from './CommentSection'
 
 const PostPage = (props) => {
+  // Retrieves postId from redirect props
   const postId = props.routeprops.match.params.id
+  // State to store post info
   const [post, setPost] = useState(null)
+  // State to determine whether component should be in 'showing' or 'editing' mode
   const [version, setVersion] = useState((props.routeprops && props.routeprops.location.state) ? props.routeprops.location.state.version : 'showing')
+  // State for handling redirect to feed if the user deletes the post
   const [deleted, setDeleted] = useState(false)
+  // State for refreshing the page to display latest post info (after editing)
   const [refresh, setRefresh] = useState(false)
 
+  // Upon switching 'versions' of the component or after updating the post, retrieve latest post info to display
   useEffect(() => {
-    console.log('props are', props)
     axios({
       method: 'GET',
       url: apiUrl + '/posts/' + postId
     })
+      // Set state to have the latest post info
       .then((response) => {
         setPost(response.data)
       })
+      // Failure alert box
       .catch(() => {
         props.msgAlert({
           heading: 'Unable to load post.',
@@ -32,6 +39,7 @@ const PostPage = (props) => {
       })
   }, [version, refresh])
 
+  // Handles 'delete post' request to back-end
   const deleteHandler = (event) => {
     event.stopPropagation()
 
@@ -42,6 +50,7 @@ const PostPage = (props) => {
         Authorization: `Token ${props.user.token}`
       }
     })
+      // Success alert box
       .then(() => {
         props.msgAlert({
           heading: 'Deleted Successfully',
@@ -49,9 +58,11 @@ const PostPage = (props) => {
           variant: 'success'
         })
       })
+      // Changes state to trigger redirect to 'Feed' upon deleting a post
       .then(() => {
         setDeleted(true)
       })
+      // Failure alert box
       .catch(() => {
         props.msgAlert({
           heading: 'Delete Unsuccessful',
@@ -61,6 +72,7 @@ const PostPage = (props) => {
       })
   }
 
+  // Changes component from 'showing' mode to 'editing' mode
   const editHandler = (event) => {
     event.preventDefault()
 
@@ -90,22 +102,30 @@ const PostPage = (props) => {
     marginRight: '10px'
   }
 
+  // Renders post information  and CommentSection component if in 'showing' mode
+  // Renders post edit form if in 'editing' mode
   return (
     <div>
       {!post && <h1>Loading...</h1>}
-      {post && (version === 'showing') && <div style={postBoxStyle}>
-        <small>Posted by {post.owner.email}</small>
-        { (post.created_at.slice(0, 22)) !== (post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
-        { props.user && (props.user.id === post.owner.id) && <React.Fragment>
-          <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
-          <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
-        </React.Fragment>}
-        <p style={titleStyle}>{post.title}</p>
-        <p style={bodyStyle}>{post.body}</p>
-      </div>}
-      {post && (version === 'editing') && <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} msgAlert={props.msgAlert} />}
+      {post && (version === 'showing') &&
+        <div style={postBoxStyle}>
+          <small>Posted by {post.owner.email}</small>
+          { (post.created_at.slice(0, 22)) !== (post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
+          { props.user && (props.user.id === post.owner.id) && <React.Fragment>
+            <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
+            <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
+          </React.Fragment>}
+          <p style={titleStyle}>{post.title}</p>
+          <p style={bodyStyle}>{post.body}</p>
+        </div>
+      }
+      {post && (version === 'editing') &&
+        <PostEdit post={post} user={props.user} setVersion={setVersion} setPost={setPost} msgAlert={props.msgAlert} />
+      }
       {deleted && <Redirect to="/feed"/>}
-      {post && version === 'showing' && <CommentSection post={post} msgAlert={props.msgAlert} user={props.user} postPageRefresh={refresh} setPostPageRefresh={setRefresh} />}
+      {post && version === 'showing' &&
+        <CommentSection post={post} msgAlert={props.msgAlert} user={props.user} postPageRefresh={refresh} setPostPageRefresh={setRefresh} />
+      }
     </div>
   )
 }
