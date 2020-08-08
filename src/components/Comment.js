@@ -3,71 +3,21 @@ import axios from 'axios'
 
 import Button from 'react-bootstrap/Button'
 
-import CommentEdit from './CommentEdit'
+import CommentEditForm from './CommentEditForm'
 import apiUrl from './../apiConfig'
 
 const Comment = (props) => {
   const { comment, msgAlert } = props
-  const [editing, setEditing] = useState(false)
-  const [updatedComment, setUpdatedComment] = useState({
-    body: comment.body,
-    post: comment.post
-  })
 
-  const editHandler = () => {
-    console.log('time to edit')
-    setEditing(true)
-  }
+  // State variable to track modal state (open or closed)
+  const [show, setShow] = useState(false)
 
-  const cancelEdit = () => {
-    setUpdatedComment({
-      body: comment.body,
-      post: comment.post
-    })
-    setEditing(false)
-  }
+  // Handlers to open and close the modal
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
 
-  const submitHandler = (event) => {
-    event.preventDefault()
-
-    console.log('time to submit the form', updatedComment)
-    axios({
-      method: 'PATCH',
-      url: apiUrl + `/comments/${comment.id}`,
-      headers: {
-        Authorization: `Token ${props.user.token}`
-      },
-      data: {
-        comment: updatedComment
-      }
-    })
-      .then(() => {
-        msgAlert({
-          heading: 'Comment Updated.',
-          message: 'Your comment has been updated.',
-          variant: 'success'
-        })
-      })
-      .then(() => {
-        console.log('time for a refresh!')
-        props.setPostPageRefresh(!props.postPageRefresh)
-      })
-      .then(() => {
-        console.log('now turn off editing')
-        setEditing(false)
-      })
-      .catch(() => {
-        msgAlert({
-          heading: 'Unable to update comment.',
-          message: 'Something went wrong, please try again later.',
-          variant: 'danger'
-        })
-      })
-  }
-
+  // Handles 'delete comment' request to back-end
   const deleteHandler = () => {
-    console.log('time to delete')
-
     axios({
       method: 'DELETE',
       url: apiUrl + `/comments/${props.comment.id}`,
@@ -75,6 +25,7 @@ const Comment = (props) => {
         Authorization: `Token ${props.user.token}`
       }
     })
+      // Success alert box
       .then(() => {
         msgAlert({
           heading: 'Removed comment.',
@@ -82,9 +33,11 @@ const Comment = (props) => {
           variant: 'success'
         })
       })
+      // Refreshes PostPage component so deleted comment is no longer displayed
       .then(() => {
         props.setPostPageRefresh(!props.postPageRefresh)
       })
+      // Failure alert box
       .catch(() => {
         msgAlert({
           heading: 'Unable to remove comment.',
@@ -115,16 +68,19 @@ const Comment = (props) => {
     marginRight: '10px'
   }
 
+  // Render comment author, body, and edited status
+  // Render edit and delete buttons if user is the owner of the comment
+  // Render edit modal (CommentEditForm component) to be opened with the 'edit' button
   return (
     <div style={commentBoxStyle}>
       <small>{comment.owner.email}</small>
       { (comment.created_at.slice(0, 22)) !== (comment.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
-      { props.user && !editing && (props.user.id === comment.owner.id) && <React.Fragment>
-        <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
+      { props.user && (props.user.id === comment.owner.id) && <React.Fragment>
+        <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={handleShow}>Edit</Button>
         <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
       </React.Fragment>}
-      {!editing && <p style={bodyStyle}>{props.comment.body}</p>}
-      {editing && <CommentEdit submitHandler={submitHandler} updatedComment={updatedComment} setUpdatedComment={setUpdatedComment} cancelEdit={cancelEdit}/>}
+      <p style={bodyStyle}>{props.comment.body}</p>
+      <CommentEditForm currentComment={comment} show={show} handleClose={handleClose} user={props.user} msgAlert={msgAlert} setPostPageRefresh={props.setPostPageRefresh} postPageRefresh={props.postPageRefresh} />
     </div>
   )
 }

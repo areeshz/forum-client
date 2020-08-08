@@ -9,17 +9,21 @@ import apiUrl from './../apiConfig.js'
 
 const CreatePostForm = (props) => {
   const { msgAlert } = props
+
+  // State for tracking inputs in the create post form
   const [post, setPost] = useState({
     title: '',
     body: ''
   })
 
+  // Handle changes to the form by updating the state
   const handleInputChange = (event) => {
     event.preventDefault()
     const updatedField = { [event.target.name]: event.target.value }
     setPost({ ...post, ...updatedField })
   }
 
+  // Upon closing of the modal, reset form to blank values
   const handleClose = () => {
     props.handleClose()
     setPost({
@@ -28,10 +32,9 @@ const CreatePostForm = (props) => {
     })
   }
 
+  // Handles 'create post' request to back-end
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    console.log('ready to submit, here is the data', post)
 
     axios({
       method: 'POST',
@@ -43,6 +46,7 @@ const CreatePostForm = (props) => {
         post: post
       }
     })
+      // Success alert box
       .then(() => {
         handleClose()
         msgAlert({
@@ -50,8 +54,10 @@ const CreatePostForm = (props) => {
           message: 'Your post has been added to the forum!',
           variant: 'success'
         })
+        // Refreshes the Feed when to display the new post
         props.setRefresh(!props.refresh)
       })
+      // Failure alert box
       .catch(() => {
         msgAlert({
           heading: 'Unable to post.',
@@ -67,6 +73,7 @@ const CreatePostForm = (props) => {
     paddingRight: '0'
   }
 
+  // Renders a modal with a form for creating a new post
   return (
     <div>
       <Modal show={props.show} onHide={handleClose} size="lg">
@@ -86,10 +93,10 @@ const CreatePostForm = (props) => {
             </Form.Group>
             <Modal.Footer style={modalFooterStyle}>
               <Button variant="secondary" onClick={handleClose}>
-                CANCEL
+                Cancel
               </Button>
               <Button variant="primary" type="submit">
-                POST
+                Post
               </Button>
             </Modal.Footer>
           </Form>
