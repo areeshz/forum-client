@@ -4,6 +4,7 @@ import axios from 'axios'
 import Button from 'react-bootstrap/Button'
 
 import CommentEdit from './CommentEdit'
+import CommentEditForm from './CommentEditForm'
 import apiUrl from './../apiConfig'
 
 const Comment = (props) => {
@@ -14,10 +15,21 @@ const Comment = (props) => {
     post: comment.post
   })
 
-  const editHandler = () => {
-    console.log('time to edit')
-    setEditing(true)
+  const [show, setShow] = useState(false)
+
+  const handleClose = () => setShow(false)
+  const handleShow = () => {
+    // setUpdatedComment({
+    //   body: comment.body,
+    //   post: comment.post
+    // })
+    setShow(true)
   }
+
+  // const editHandler = () => {
+  //   console.log('time to edit')
+  //   setEditing(true)
+  // }
 
   const cancelEdit = () => {
     setUpdatedComment({
@@ -120,11 +132,12 @@ const Comment = (props) => {
       <small>{comment.owner.email}</small>
       { (comment.created_at.slice(0, 22)) !== (comment.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
       { props.user && !editing && (props.user.id === comment.owner.id) && <React.Fragment>
-        <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
+        <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={handleShow}>Edit</Button>
         <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
       </React.Fragment>}
       {!editing && <p style={bodyStyle}>{props.comment.body}</p>}
       {editing && <CommentEdit submitHandler={submitHandler} updatedComment={updatedComment} setUpdatedComment={setUpdatedComment} cancelEdit={cancelEdit}/>}
+      <CommentEditForm currentComment={comment} show={show} handleClose={handleClose} user={props.user} msgAlert={msgAlert} setPostPageRefresh={props.setPostPageRefresh} postPageRefresh={props.postPageRefresh} />
     </div>
   )
 }
