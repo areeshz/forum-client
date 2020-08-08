@@ -22,7 +22,7 @@ const CommentSection = (props) => {
       {props.post && <CreateCommentForm post={props.post} user={props.user} msgAlert={props.msgAlert} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} />}
       {console.log('this is the post', props.post)}
       {props.post && props.post.comments.map((comment, index) => (
-        <Comment key={index} comment={comment} />
+        <Comment key={index} comment={comment} user={props.user} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} msgAlert={props.msgAlert} />
       ))}
     </div>
   )
