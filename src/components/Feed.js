@@ -19,7 +19,7 @@ const Feed = (props) => {
     console.log('CHANGE')
     axios({
       method: 'GET',
-      url: apiUrl + '/feed'
+      url: apiUrl + '/posts'
     })
       .then(response => {
         // sorts the posts with newest first

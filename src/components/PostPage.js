@@ -18,7 +18,7 @@ const PostPage = (props) => {
     console.log('props are', props)
     axios({
       method: 'GET',
-      url: apiUrl + '/feed/' + postId
+      url: apiUrl + '/posts/' + postId
     })
       .then((response) => {
         setPost(response.data)
