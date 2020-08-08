@@ -52,6 +52,18 @@ const PostEdit = (props) => {
       })
   }
 
+  const buttonGroupStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    '&button': {
+      marginLeft: '30px'
+    }
+  }
+
+  const cancelButtonStyle = {
+    marginRight: '10px'
+  }
+
   return (
     <div>
       <h1>Editing: {props.post.title}</h1>
@@ -65,9 +77,12 @@ const PostEdit = (props) => {
           <Form.Label>Post Body</Form.Label>
           <Form.Control as="textarea" rows="4" placeholder="Text" name="body" value={post.body} onChange={handleInputChange} />
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Save Changes
-        </Button>
+        <Form.Group style={buttonGroupStyle}>
+          <Button variant="secondary" style={cancelButtonStyle} onClick={() => { props.setVersion('showing') }}>Cancel</Button>
+          <Button variant="primary" type="submit">
+            Save Changes
+          </Button>
+        </Form.Group>
       </Form>
     </div>
   )
