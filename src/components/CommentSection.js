@@ -23,8 +23,9 @@ const CommentSection = (props) => {
     <div style={commentSectionStyle}>
       {console.log(props)}
       <h2 style={headingStyle}>Comments</h2>
-      {props.post && <CreateCommentForm post={props.post} user={props.user} msgAlert={props.msgAlert} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} />}
-      {console.log('this is the post', props.post)}
+      {props.post && props.user &&
+        <CreateCommentForm post={props.post} user={props.user} msgAlert={props.msgAlert} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} />
+      }
       {props.post && sortedComments.map((comment, index) => (
         <Comment key={index} comment={comment} user={props.user} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} msgAlert={props.msgAlert} />
       ))}
