@@ -34,18 +34,20 @@ const Post = (props) => {
 
   const messageHoverStyle = {
     fontWeight: '500',
-    textDecoration: 'underline'
+    textDecoration: 'underline',
+    marginBottom: '0'
   }
 
   const messageNoHoverStyle = {
-    fontWeight: '400'
+    fontWeight: '400',
+    marginBottom: '0'
   }
 
   const postBoxStyle = {
     border: '1px solid black',
     width: '500px',
     margin: '20px auto 0 auto',
-    padding: '10px 20px 10px 20px',
+    padding: '10px 20px 15px 20px',
     borderRadius: '7px',
     maxWidth: '80vw'
   }
@@ -56,24 +58,42 @@ const Post = (props) => {
 
   const titleStyle = {
     fontSize: '20px',
-    margin: '16px 0',
+    margin: '10px 0',
     fontWeight: '500'
   }
 
   const titleHoverStyle = {
     fontSize: '20px',
-    margin: '16px 0',
+    margin: '10px 0',
     fontWeight: '500',
     textDecoration: 'underline'
   }
 
   const bodyStyle = {
-    whiteSpace: 'pre-wrap'
+    whiteSpace: 'pre-wrap',
+    marginBottom: '0'
   }
 
   const dropdownStyle = {
     display: 'inline-block',
     float: 'right'
+  }
+
+  const topicStyle = {
+    display: 'inline-block',
+    marginRight: '15px',
+    fontWeight: '600'
+  }
+
+  const authorStyle = {
+    wordBreak: 'break-all',
+    color: '#787C7E'
+  }
+
+  const editedBadgeStyle = {
+    paddingLeft: '15px',
+    display: 'inline-block',
+    color: '#787C7E'
   }
 
   // Handles 'delete post' request to back-end
@@ -119,8 +139,9 @@ const Post = (props) => {
   return (
     <div>
       <div style={postBoxStyle}>
-        <small style={{ wordBreak: 'break-all' }}>Posted by {props.owner.email}</small>
-        { (props.post.created_at.slice(0, 22)) !== (props.post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
+        <small style={topicStyle}>{props.post.topic}</small>
+        <small style={authorStyle}>Posted by {props.owner.email}</small>
+        { (props.post.created_at.slice(0, 22)) !== (props.post.updated_at.slice(0, 22)) && <small style={editedBadgeStyle}>(edited)</small>}
         { user && (user.id === props.owner.id) && <React.Fragment>
           <DropdownButton style={dropdownStyle} id="edit/delete dropdown" variant="outline-info" drop="down" size="sm" title="&#9776; ">
             <Dropdown.Item as="button" onClick={editHandler}>Edit</Dropdown.Item>
@@ -130,7 +151,7 @@ const Post = (props) => {
         <div onClick={handleClick} style={clickableDivStyle} onMouseEnter={toggleHover} onMouseLeave={toggleHover}>
           <p style={hover ? titleHoverStyle : titleStyle}>{props.title}</p>
           <p style={bodyStyle}>{postBody}<span style={{ fontWeight: '9' }}>{ellipses}</span></p>
-          <p style={hover ? messageHoverStyle : messageNoHoverStyle}>{readMoreMessage}</p>
+          { readMoreMessage && <p style={hover ? messageHoverStyle : messageNoHoverStyle}>{readMoreMessage}</p>}
           { show && <Redirect to={{
             pathname: `/posts/${props.postid}`,
             state: {

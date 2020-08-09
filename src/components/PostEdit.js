@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import axios from 'axios'
 
 import apiUrl from './../apiConfig'
@@ -9,7 +11,8 @@ const PostEdit = (props) => {
   // State to track the inputs in the edit post form
   const [post, setPost] = useState({
     title: props.post.title,
-    body: props.post.body
+    body: props.post.body,
+    topic: props.post.topic
   })
 
   // Handles changes to the form by updating the state
@@ -72,10 +75,28 @@ const PostEdit = (props) => {
     <div>
       <h1>Editing: {props.post.title}</h1>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formBasicTitle">
-          <Form.Label>Post Title</Form.Label>
-          <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} />
-        </Form.Group>
+        <Row>
+          <Col>
+            <Form.Group controlId="formBasicTitle">
+              <Form.Label>Post Title</Form.Label>
+              <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} />
+            </Form.Group>
+          </Col>
+          <Col xs="auto">
+            <Form.Group>
+              <Form.Label>Topic</Form.Label>
+              <Form.Control as="select" value={post.topic} onChange={handleInputChange} name="topic">
+                <option value="General">General</option>
+                <option value="Sports">Sports</option>
+                <option value="Advice">Advice</option>
+                <option value="Pets">Pets</option>
+                <option value="Movies / TV">Movies / TV</option>
+                <option value="Books">Books</option>
+                <option value="Current Events">Current Events</option>
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
 
         <Form.Group controlId="formBasicBody">
           <Form.Label>Post Body</Form.Label>
