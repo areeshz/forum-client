@@ -102,6 +102,23 @@ const PostPage = (props) => {
     float: 'right'
   }
 
+  const topicStyle = {
+    display: 'inline-block',
+    marginRight: '15px',
+    fontWeight: '600'
+  }
+
+  const authorStyle = {
+    wordBreak: 'break-all',
+    color: '#787C7E'
+  }
+
+  const editedBadgeStyle = {
+    paddingLeft: '15px',
+    display: 'inline-block',
+    color: '#787C7E'
+  }
+
   // Renders post information  and CommentSection component if in 'showing' mode
   // Renders post edit form if in 'editing' mode
   return (
@@ -109,8 +126,9 @@ const PostPage = (props) => {
       {!post && <h1>Loading...</h1>}
       {post && (version === 'showing') &&
         <div style={postBoxStyle}>
-          <small>Posted by {post.owner.email}</small>
-          { (post.created_at.slice(0, 22)) !== (post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
+          <small style={topicStyle}>{post.topic}</small>
+          <small style={authorStyle}>Posted by {post.owner.email}</small>
+          { (post.created_at.slice(0, 22)) !== (post.updated_at.slice(0, 22)) && <small style={editedBadgeStyle}>(edited)</small>}
           { props.user && (props.user.id === post.owner.id) && <React.Fragment>
             <DropdownButton style={dropdownStyle} id="edit/delete dropdown" variant="outline-info" drop="down" size="sm" title="&#9776; ">
               <Dropdown.Item as="button" onClick={editHandler}>Edit</Dropdown.Item>

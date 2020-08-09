@@ -4,6 +4,8 @@ import axios from 'axios'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 import apiUrl from './../apiConfig.js'
 
@@ -13,7 +15,8 @@ const CreatePostForm = (props) => {
   // State for tracking inputs in the create post form
   const [post, setPost] = useState({
     title: '',
-    body: ''
+    body: '',
+    topic: ''
   })
 
   // Handle changes to the form by updating the state
@@ -35,6 +38,7 @@ const CreatePostForm = (props) => {
   // Handles 'create post' request to back-end
   const handleSubmit = (event) => {
     event.preventDefault()
+    console.log('post details before submision', post)
 
     axios({
       method: 'POST',
@@ -82,10 +86,28 @@ const CreatePostForm = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicTitle">
-              <Form.Label>Post Title</Form.Label>
-              <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} required />
-            </Form.Group>
+            <Row>
+              <Col>
+                <Form.Group controlId="formBasicTitle">
+                  <Form.Label>Post Title</Form.Label>
+                  <Form.Control type="text" placeholder="Title" name="title" value={post.title} onChange={handleInputChange} required />
+                </Form.Group>
+              </Col>
+              <Col xs="auto">
+                <Form.Group>
+                  <Form.Label>Topic</Form.Label>
+                  <Form.Control as="select" value={post.topic} onChange={handleInputChange} name="topic">
+                    <option value="General">General</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Advice">Advice</option>
+                    <option value="Pets">Pets</option>
+                    <option value="Movies / TV">Movies / TV</option>
+                    <option value="Books">Books</option>
+                    <option value="Current Events">Current Events</option>
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+            </Row>
 
             <Form.Group controlId="formBasicBody">
               <Form.Label>Post Body</Form.Label>
