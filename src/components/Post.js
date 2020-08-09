@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
-import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
@@ -21,7 +22,10 @@ const Post = (props) => {
     margin: '20px auto 0 auto',
     padding: '10px 20px 10px 20px',
     borderRadius: '7px',
-    maxWidth: '80vw',
+    maxWidth: '80vw'
+  }
+
+  const clickableDivStyle = {
     cursor: 'pointer'
   }
 
@@ -31,14 +35,13 @@ const Post = (props) => {
     fontWeight: '500'
   }
 
-  const buttonStyle = {
-    display: 'inline-block',
-    marginLeft: '10px',
-    marginRight: '10px'
-  }
-
   const bodyStyle = {
     whiteSpace: 'pre-wrap'
+  }
+
+  const dropdownStyle = {
+    display: 'inline-block',
+    float: 'right'
   }
 
   // Handles 'delete post' request to back-end
@@ -82,29 +85,35 @@ const Post = (props) => {
   // Renders edit and delete buttons if user is the owner of the post
   // Sets up redirects to the PostPage component / route for 'showing mode' and 'editing mode'
   return (
-    <div style={postBoxStyle} onClick={handleClick}>
-      <small>Posted by {props.owner.email}</small>
-      { (props.post.created_at.slice(0, 22)) !== (props.post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
-      { user && (user.id === props.owner.id) && <React.Fragment>
-        <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
-        <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
-      </React.Fragment>}
-      <p style={titleStyle}>{props.title}</p>
-      <p style={bodyStyle}>{props.body}</p>
-      { show && <Redirect to={{
-        pathname: `/posts/${props.postid}`,
-        state: {
-          version: 'showing'
-        }
-      }}
-      />}
-      { edit && <Redirect to={{
-        pathname: `/posts/${props.postid}`,
-        state: {
-          version: 'editing'
-        }
-      }}
-      />}
+    <div>
+      <div style={postBoxStyle}>
+        <small style={{ wordBreak: 'break-all' }}>Posted by {props.owner.email}</small>
+        { (props.post.created_at.slice(0, 22)) !== (props.post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
+        { user && (user.id === props.owner.id) && <React.Fragment>
+          <DropdownButton style={dropdownStyle} id="edit/delete dropdown" variant="outline-info" drop="down" size="sm" title="&#9776; ">
+            <Dropdown.Item as="button" onClick={editHandler}>Edit</Dropdown.Item>
+            <Dropdown.Item as="button" onClick={deleteHandler} style={{ color: 'red' }}>Delete</Dropdown.Item>
+          </DropdownButton>
+        </React.Fragment>}
+        <div onClick={handleClick} style={clickableDivStyle}>
+          <p style={titleStyle}>{props.title}</p>
+          <p style={bodyStyle}>{props.body}</p>
+          { show && <Redirect to={{
+            pathname: `/posts/${props.postid}`,
+            state: {
+              version: 'showing'
+            }
+          }}
+          />}
+          { edit && <Redirect to={{
+            pathname: `/posts/${props.postid}`,
+            state: {
+              version: 'editing'
+            }
+          }}
+          />}
+        </div>
+      </div>
     </div>
   )
 }

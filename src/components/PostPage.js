@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
-import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 
 import PostEdit from './PostEdit'
 import CommentSection from './CommentSection'
@@ -96,10 +97,9 @@ const PostPage = (props) => {
     whiteSpace: 'pre-wrap'
   }
 
-  const buttonStyle = {
+  const dropdownStyle = {
     display: 'inline-block',
-    marginLeft: '10px',
-    marginRight: '10px'
+    float: 'right'
   }
 
   // Renders post information  and CommentSection component if in 'showing' mode
@@ -112,8 +112,10 @@ const PostPage = (props) => {
           <small>Posted by {post.owner.email}</small>
           { (post.created_at.slice(0, 22)) !== (post.updated_at.slice(0, 22)) && <small style={{ paddingLeft: '15px', display: 'inline-block' }}>(edited)</small>}
           { props.user && (props.user.id === post.owner.id) && <React.Fragment>
-            <Button style={buttonStyle} variant="outline-warning" size="sm" onClick={editHandler}>Edit</Button>
-            <Button style={buttonStyle} variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
+            <DropdownButton style={dropdownStyle} id="edit/delete dropdown" variant="outline-info" drop="down" size="sm" title="&#9776; ">
+              <Dropdown.Item as="button" onClick={editHandler}>Edit</Dropdown.Item>
+              <Dropdown.Item as="button" onClick={deleteHandler} style={{ color: 'red' }}>Delete</Dropdown.Item>
+            </DropdownButton>
           </React.Fragment>}
           <p style={titleStyle}>{post.title}</p>
           <p style={bodyStyle}>{post.body}</p>
