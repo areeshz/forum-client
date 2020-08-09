@@ -31,6 +31,11 @@ const CommentSection = (props) => {
       {props.post && sortedComments.map((comment, index) => (
         <Comment key={index} comment={comment} user={props.user} postPageRefresh={props.postPageRefresh} setPostPageRefresh={props.setPostPageRefresh} msgAlert={props.msgAlert} />
       ))}
+      { /* Add 'no comments' message if no comments on post */ }
+      {props.post && sortedComments.length === 0 && <React.Fragment>
+        <br />
+        <h2 style={headingStyle}>No comments... yet!</h2>
+      </React.Fragment>}
     </div>
   )
 }
