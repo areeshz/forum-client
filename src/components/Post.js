@@ -16,6 +16,31 @@ const Post = (props) => {
     setShow(true)
   }
 
+  // Define values for body of post, and other variables for truncating the post
+  let postBody = props.body
+  let ellipses = ''
+  let readMoreMessage = ''
+
+  // If the post body is sufficiently long, truncate it, add ellipses, and add a 'read more' message
+  if (props.body.length > 375) {
+    postBody = props.body.slice(0, 375)
+    ellipses = '...'
+    readMoreMessage = '(Read More)'
+  }
+
+  const [hover, setHover] = useState(false)
+
+  const toggleHover = () => setHover(!hover)
+
+  const messageHoverStyle = {
+    fontWeight: '500',
+    textDecoration: 'underline'
+  }
+
+  const messageNoHoverStyle = {
+    fontWeight: '400'
+  }
+
   const postBoxStyle = {
     border: '1px solid black',
     width: '500px',
@@ -33,6 +58,13 @@ const Post = (props) => {
     fontSize: '20px',
     margin: '16px 0',
     fontWeight: '500'
+  }
+
+  const titleHoverStyle = {
+    fontSize: '20px',
+    margin: '16px 0',
+    fontWeight: '500',
+    textDecoration: 'underline'
   }
 
   const bodyStyle = {
@@ -95,9 +127,10 @@ const Post = (props) => {
             <Dropdown.Item as="button" onClick={deleteHandler} style={{ color: 'red' }}>Delete</Dropdown.Item>
           </DropdownButton>
         </React.Fragment>}
-        <div onClick={handleClick} style={clickableDivStyle}>
-          <p style={titleStyle}>{props.title}</p>
-          <p style={bodyStyle}>{props.body}</p>
+        <div onClick={handleClick} style={clickableDivStyle} onMouseEnter={toggleHover} onMouseLeave={toggleHover}>
+          <p style={hover ? titleHoverStyle : titleStyle}>{props.title}</p>
+          <p style={bodyStyle}>{postBody}<span style={{ fontWeight: '9' }}>{ellipses}</span></p>
+          <p style={hover ? messageHoverStyle : messageNoHoverStyle}>{readMoreMessage}</p>
           { show && <Redirect to={{
             pathname: `/posts/${props.postid}`,
             state: {

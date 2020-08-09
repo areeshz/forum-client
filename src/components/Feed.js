@@ -57,7 +57,7 @@ const Feed = (props) => {
 
   // Renders each post from the server, and the create post button and modal
   return (
-    <div>
+    <div style={{ paddingBottom: '10px' }}>
       { !posts && <h1 style={{ textAlign: 'center' }}>Loading Feed...</h1>}
       { posts && <React.Fragment>
         <CreatePostButton handleShow={handleShow}/>
