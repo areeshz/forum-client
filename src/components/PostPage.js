@@ -4,6 +4,7 @@ import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Spinner from 'react-bootstrap/Spinner'
 
 import PostEdit from './PostEdit'
 import CommentSection from './CommentSection'
@@ -119,11 +120,20 @@ const PostPage = (props) => {
     color: '#787C7E'
   }
 
+  const loadingBoxStyle = {
+    display: 'block',
+    margin: '0 auto',
+    textAlign: 'center'
+  }
+
   // Renders post information  and CommentSection component if in 'showing' mode
   // Renders post edit form if in 'editing' mode
   return (
     <div>
-      {!post && <h1>Loading...</h1>}
+      {!post && <div style={loadingBoxStyle}>
+        <h1>Loading Post...</h1>
+        <Spinner animation="border"/>
+      </div>}
       {post && (version === 'showing') &&
         <div style={postBoxStyle}>
           <small style={topicStyle}>{post.topic}</small>
