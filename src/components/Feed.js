@@ -80,7 +80,7 @@ const Feed = (props) => {
           variant: 'danger'
         })
       })
-  }, [refresh, props])
+  }, [refresh, topic])
 
   // State for handling the view status of the 'create post' modal
   const [show, setShow] = useState(false)
