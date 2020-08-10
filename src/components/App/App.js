@@ -7,7 +7,7 @@ import Header from '../Header/Header'
 import SignUp from '../SignUp/SignUp'
 import SignIn from '../SignIn/SignIn'
 import SignOut from '../SignOut/SignOut'
-import ChangePassword from '../ChangePassword/ChangePassword'
+import AccountPage from '../AccountPage'
 
 // import Post from './../Post'
 import Feed from './../Feed'
@@ -68,8 +68,8 @@ class App extends Component {
           <AuthenticatedRoute user={user} path='/sign-out' render={() => (
             <SignOut msgAlert={this.msgAlert} clearUser={this.clearUser} user={user} />
           )} />
-          <AuthenticatedRoute user={user} path='/change-password' render={() => (
-            <ChangePassword msgAlert={this.msgAlert} user={user} />
+          <AuthenticatedRoute user={user} path='/account' render={() => (
+            <AccountPage msgAlert={this.msgAlert} user={user} />
           )} />
         </main>
       </Fragment>
