@@ -52,6 +52,9 @@ class App extends Component {
           <Route exact path='/feed' render={() => (
             <Feed token={this.state.user ? this.state.user.token : null} user={this.state.user} msgAlert={this.msgAlert} />
           )} />
+          <Route exact path='/feed/:topic' render={(routeProps) => (
+            <Feed token={this.state.user ? this.state.user.token : null} user={this.state.user} msgAlert={this.msgAlert} routeProps={routeProps} topic={routeProps.match.params.topic}/>
+          )}/>
           <Route path='/posts/:id' render={(props) => (
             <PostPage routeprops={props} user={user} msgAlert={this.msgAlert}/>
           )}/>

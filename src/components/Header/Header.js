@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
 
 const authenticatedOptions = (
   <Fragment>
@@ -18,7 +19,17 @@ const unauthenticatedOptions = (
 
 const alwaysOptions = (
   <Fragment>
-    <Nav.Link href="#feed">Feed</Nav.Link>
+    <NavDropdown title="Feed (Topics)" id="collasible-nav-dropdown">
+      <NavDropdown.Item href="#feed">All</NavDropdown.Item>
+      <NavDropdown.Divider />
+      <NavDropdown.Item href="#feed/General">General</NavDropdown.Item>
+      <NavDropdown.Item href="#feed/Sports">Sports</NavDropdown.Item>
+      <NavDropdown.Item href="#feed/Advice">Advice</NavDropdown.Item>
+      <NavDropdown.Item href="#feed/Pets">Pets</NavDropdown.Item>
+      <NavDropdown.Item href="#feed/Movies%20TV">Movies / TV</NavDropdown.Item>
+      <NavDropdown.Item href="#feed/Books">Books</NavDropdown.Item>
+      <NavDropdown.Item href="#feed/Current%20Events">Current Events</NavDropdown.Item>
+    </NavDropdown>
   </Fragment>
 )
 

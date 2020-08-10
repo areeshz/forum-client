@@ -6,16 +6,45 @@ import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
 const Feed = (props) => {
-  const { msgAlert } = props
+  console.log('props are', props)
+  const { msgAlert, topic } = props
   const [posts, setPosts] = useState(null)
   const [refresh, setRefresh] = useState(false)
+
+  // If a 'topic' prop is passed, generate a query to be added to the apiUrl to filter posts by topic
+  const topicQuery = (function (topic) {
+    const query = '?topic='
+    if (!topic) {
+      return ''
+    }
+    switch (topic) {
+    case 'General':
+      return query + 'General'
+    case 'Sports':
+      return query + 'Sports'
+    case 'Advice':
+      return query + 'Advice'
+    case 'Pets':
+      return query + 'Pets'
+    case 'Movies TV':
+      return query + 'Movies%20/%20TV'
+    case 'Books':
+      return query + 'Books'
+    case 'Current Events':
+      return query + 'Current%20Events'
+    default:
+      return ''
+    }
+  })(topic)
+  console.log(topicQuery)
 
   // To be run upon  mount and upon closing of 'create post' modal
   // Grabs the latest list of posts from the server and saves them in the state
   useEffect(() => {
     axios({
       method: 'GET',
-      url: apiUrl + '/posts'
+      // topicQuery used to filter posts by topic
+      url: apiUrl + '/posts' + topicQuery
     })
       .then(response => {
         // sorts the posts with newest first
@@ -32,7 +61,7 @@ const Feed = (props) => {
           variant: 'danger'
         })
       })
-  }, [refresh])
+  }, [refresh, props])
 
   // State for handling the view status of the 'create post' modal
   const [show, setShow] = useState(false)
