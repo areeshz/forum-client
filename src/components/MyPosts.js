@@ -9,7 +9,6 @@ import Post from './Post'
 const MyPosts = (props) => {
   const { msgAlert, user } = props
   const [posts, setPosts] = useState(null)
-  console.log(setPosts)
 
   useEffect(() => {
     axios({
