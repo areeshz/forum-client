@@ -38,7 +38,6 @@ const CreatePostForm = (props) => {
   // Handles 'create post' request to back-end
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('post details before submision', post)
 
     axios({
       method: 'POST',

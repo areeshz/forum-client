@@ -8,7 +8,6 @@ import apiUrl from './../apiConfig.js'
 import Spinner from 'react-bootstrap/Spinner'
 
 const Feed = (props) => {
-  console.log('props are', props)
   const { msgAlert, topic } = props
   const [posts, setPosts] = useState(null)
   const [refresh, setRefresh] = useState(false)
@@ -53,7 +52,6 @@ const Feed = (props) => {
       return ''
     }
   })(topic)
-  console.log(topicQuery)
 
   // To be run upon  mount and upon closing of 'create post' modal
   // Grabs the latest list of posts from the server and saves them in the state
