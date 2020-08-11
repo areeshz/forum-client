@@ -128,9 +128,16 @@ const Feed = (props) => {
       </div>}
       { posts && <React.Fragment>
         <CreatePostButton handleShow={handleShow}/>
-        {posts.map(post => (
-          <Post key={post.id} title={post.title} owner={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} post={post} />
-        ))}
+        {posts.map(post => {
+          let liked = false
+          // determines if the user has liked the post
+          if (props.user) {
+            liked = post.liked_users.some(person => {
+              return person.id === props.user.id
+            })
+          }
+          return <Post key={post.id} title={post.title} owner={post.owner} body={post.body} postid={post.id} user={props.user} msgAlert={msgAlert} refresh={refresh} setRefresh={setRefresh} post={post} liked={liked}/>
+        })}
       </React.Fragment>}
       { /* Add 'no posts' message if no posts in given topic */}
       {posts && posts.length === 0 &&

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Button from 'react-bootstrap/Button'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
@@ -10,6 +11,9 @@ const Post = (props) => {
   // States for determining if a user should be directed to the PostPage in showing mode or editing mode
   const [show, setShow] = useState(null)
   const [edit, setEdit] = useState(null)
+  const [liked, setLiked] = useState(props.liked)
+  const [numLikes, setNumLikes] = useState(props.post.liked_users.length)
+  const [buttonVariant, setButtonVariant] = useState(props.liked ? 'primary' : 'outline-primary')
 
   // Sends user to the PostPage in showing mode
   const handleClick = () => {
@@ -133,6 +137,73 @@ const Post = (props) => {
     setEdit(true)
   }
 
+  const createLike = () => {
+    axios({
+      method: 'POST',
+      url: apiUrl + '/likes/',
+      headers: {
+        Authorization: `Token ${user.token}`
+      },
+      data: {
+        'like': {
+          'post_id': props.post.id
+        }
+      }
+    })
+      // On success, update the liked state, like counter, and like button style
+      .then(() => {
+        setLiked(true)
+        setNumLikes(numLikes + 1)
+        setButtonVariant('primary')
+      })
+      // Failure alert box
+      .catch(() => {
+        msgAlert({
+          heading: 'Like Unsuccessful',
+          message: 'Something went wrong. Please try again later.',
+          variant: 'danger'
+        })
+      })
+  }
+
+  const removeLike = () => {
+    axios({
+      method: 'DELETE',
+      url: apiUrl + '/likes/',
+      headers: {
+        Authorization: `Token ${user.token}`
+      },
+      data: {
+        post_id: props.post.id
+      }
+    })
+      // On success, update the liked state, like counter, and like button style
+      .then((response) => {
+        setLiked(false)
+        setNumLikes(numLikes - 1)
+        setButtonVariant('outline-primary')
+      })
+      // Failure alert box
+      .catch(() => {
+        msgAlert({
+          heading: 'Unable to update Like',
+          message: 'Something went wrong. Please try again later.',
+          variant: 'danger'
+        })
+      })
+  }
+
+  const likeHandler = (event) => {
+    event.stopPropagation()
+
+    console.log('trying to like this post!')
+    if (liked) {
+      removeLike()
+    } else {
+      createLike()
+    }
+  }
+
   // Renders post info (author, edit status, title, body)
   // Renders edit and delete buttons if user is the owner of the post
   // Sets up redirects to the PostPage component / route for 'showing mode' and 'editing mode'
@@ -167,6 +238,8 @@ const Post = (props) => {
           }}
           />}
         </div>
+        <p>{numLikes} Likes</p>
+        { user && <Button variant={buttonVariant} onClick={likeHandler}>{liked ? 'Unlike' : 'Like'} &#x1F44D;</Button>}
       </div>
     </div>
   )
