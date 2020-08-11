@@ -5,7 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 
 const authenticatedOptions = (
   <Fragment>
-    <Nav.Link href="#change-password">Change Password</Nav.Link>
+    <Nav.Link href="#account">My Account</Nav.Link>
     <Nav.Link href="#sign-out">Sign Out</Nav.Link>
   </Fragment>
 )
