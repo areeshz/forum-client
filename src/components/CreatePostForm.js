@@ -16,7 +16,7 @@ const CreatePostForm = (props) => {
   const [post, setPost] = useState({
     title: '',
     body: '',
-    topic: ''
+    topic: 'General'
   })
 
   // Handle changes to the form by updating the state
