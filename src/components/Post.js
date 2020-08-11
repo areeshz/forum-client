@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
@@ -33,13 +35,16 @@ const Post = (props) => {
   }
 
   const [hover, setHover] = useState(false)
+  const [commentHover, setCommentHover] = useState(false)
 
   const toggleHover = () => setHover(!hover)
+  const toggleCommentHover = () => setCommentHover(!commentHover)
 
   const messageHoverStyle = {
     fontWeight: '500',
     textDecoration: 'underline',
-    marginBottom: '0'
+    marginBottom: '0',
+    cursor: 'pointer'
   }
 
   const messageNoHoverStyle = {
@@ -51,7 +56,7 @@ const Post = (props) => {
     border: '1px solid black',
     width: '500px',
     margin: '20px auto 0 auto',
-    padding: '10px 20px 15px 20px',
+    padding: '10px 20px 10px 20px',
     borderRadius: '7px',
     maxWidth: '80vw'
   }
@@ -98,6 +103,28 @@ const Post = (props) => {
     paddingLeft: '15px',
     display: 'inline-block',
     color: '#787C7E'
+  }
+
+  const interactionsBoxStyle = {
+    marginTop: '10px'
+  }
+
+  const likeBoxStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRight: '1px solid #BEC2C4'
+  }
+
+  const commentBoxStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+
+  const likeButtonStyle = {
+    paddingRight: '13px',
+    marginLeft: '12px'
   }
 
   // Handles 'delete post' request to back-end
@@ -196,7 +223,6 @@ const Post = (props) => {
   const likeHandler = (event) => {
     event.stopPropagation()
 
-    console.log('trying to like this post!')
     if (liked) {
       removeLike()
     } else {
@@ -238,8 +264,17 @@ const Post = (props) => {
           }}
           />}
         </div>
-        <p>{numLikes} Likes</p>
-        { user && <Button variant={buttonVariant} onClick={likeHandler}>{liked ? 'Unlike' : 'Like'} &#x1F44D;</Button>}
+        <div style={interactionsBoxStyle}>
+          <Row>
+            <Col style={likeBoxStyle}>
+              <span>{numLikes} Likes</span>
+              { user && <Button variant={buttonVariant} style={likeButtonStyle} size="sm" onClick={likeHandler}>&#x1F44D;</Button>}
+            </Col>
+            <Col style={commentBoxStyle}>
+              <span onClick={handleClick} style={commentHover ? messageHoverStyle : messageNoHoverStyle} onMouseEnter={toggleCommentHover} onMouseLeave={toggleCommentHover}>{props.post.comments.length} Comments</span>
+            </Col>
+          </Row>
+        </div>
       </div>
     </div>
   )
