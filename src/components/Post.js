@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import axios from 'axios'
 import apiUrl from './../apiConfig.js'
 
@@ -10,6 +13,9 @@ const Post = (props) => {
   // States for determining if a user should be directed to the PostPage in showing mode or editing mode
   const [show, setShow] = useState(null)
   const [edit, setEdit] = useState(null)
+  const [liked, setLiked] = useState(props.liked)
+  const [numLikes, setNumLikes] = useState(props.post.liked_users.length)
+  const [buttonVariant, setButtonVariant] = useState(props.liked ? 'primary' : 'outline-primary')
 
   // Sends user to the PostPage in showing mode
   const handleClick = () => {
@@ -29,13 +35,16 @@ const Post = (props) => {
   }
 
   const [hover, setHover] = useState(false)
+  const [commentHover, setCommentHover] = useState(false)
 
   const toggleHover = () => setHover(!hover)
+  const toggleCommentHover = () => setCommentHover(!commentHover)
 
   const messageHoverStyle = {
     fontWeight: '500',
     textDecoration: 'underline',
-    marginBottom: '0'
+    marginBottom: '0',
+    cursor: 'pointer'
   }
 
   const messageNoHoverStyle = {
@@ -47,7 +56,7 @@ const Post = (props) => {
     border: '1px solid black',
     width: '500px',
     margin: '20px auto 0 auto',
-    padding: '10px 20px 15px 20px',
+    padding: '10px 20px 10px 20px',
     borderRadius: '7px',
     maxWidth: '80vw'
   }
@@ -96,6 +105,28 @@ const Post = (props) => {
     color: '#787C7E'
   }
 
+  const interactionsBoxStyle = {
+    marginTop: '10px'
+  }
+
+  const likeBoxStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRight: '1px solid #BEC2C4'
+  }
+
+  const commentBoxStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+
+  const likeButtonStyle = {
+    paddingRight: '13px',
+    marginLeft: '12px'
+  }
+
   // Handles 'delete post' request to back-end
   const deleteHandler = (event) => {
     event.stopPropagation()
@@ -133,6 +164,72 @@ const Post = (props) => {
     setEdit(true)
   }
 
+  const createLike = () => {
+    axios({
+      method: 'POST',
+      url: apiUrl + '/likes/',
+      headers: {
+        Authorization: `Token ${user.token}`
+      },
+      data: {
+        'like': {
+          'post_id': props.post.id
+        }
+      }
+    })
+      // On success, update the liked state, like counter, and like button style
+      .then(() => {
+        setLiked(true)
+        setNumLikes(numLikes + 1)
+        setButtonVariant('primary')
+      })
+      // Failure alert box
+      .catch(() => {
+        msgAlert({
+          heading: 'Like Unsuccessful',
+          message: 'Something went wrong. Please try again later.',
+          variant: 'danger'
+        })
+      })
+  }
+
+  const removeLike = () => {
+    axios({
+      method: 'DELETE',
+      url: apiUrl + '/likes/',
+      headers: {
+        Authorization: `Token ${user.token}`
+      },
+      data: {
+        post_id: props.post.id
+      }
+    })
+      // On success, update the liked state, like counter, and like button style
+      .then((response) => {
+        setLiked(false)
+        setNumLikes(numLikes - 1)
+        setButtonVariant('outline-primary')
+      })
+      // Failure alert box
+      .catch(() => {
+        msgAlert({
+          heading: 'Unable to update Like',
+          message: 'Something went wrong. Please try again later.',
+          variant: 'danger'
+        })
+      })
+  }
+
+  const likeHandler = (event) => {
+    event.stopPropagation()
+
+    if (liked) {
+      removeLike()
+    } else {
+      createLike()
+    }
+  }
+
   // Renders post info (author, edit status, title, body)
   // Renders edit and delete buttons if user is the owner of the post
   // Sets up redirects to the PostPage component / route for 'showing mode' and 'editing mode'
@@ -166,6 +263,17 @@ const Post = (props) => {
             }
           }}
           />}
+        </div>
+        <div style={interactionsBoxStyle}>
+          <Row>
+            <Col style={likeBoxStyle}>
+              <span>{numLikes} Likes</span>
+              { user && <Button variant={buttonVariant} style={likeButtonStyle} size="sm" onClick={likeHandler}>&#x1F44D;</Button>}
+            </Col>
+            <Col style={commentBoxStyle}>
+              <span onClick={handleClick} style={commentHover ? messageHoverStyle : messageNoHoverStyle} onMouseEnter={toggleCommentHover} onMouseLeave={toggleCommentHover}>{props.post.comments.length} Comments</span>
+            </Col>
+          </Row>
         </div>
       </div>
     </div>
