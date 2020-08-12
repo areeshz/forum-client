@@ -53,12 +53,13 @@ const Post = (props) => {
   }
 
   const postBoxStyle = {
-    border: '1px solid black',
     width: '500px',
     margin: '20px auto 0 auto',
     padding: '10px 20px 10px 20px',
     borderRadius: '7px',
-    maxWidth: '80vw'
+    maxWidth: '80vw',
+    backgroundColor: 'white',
+    boxShadow: '0 0 2px 0 #595959'
   }
 
   const clickableDivStyle = {

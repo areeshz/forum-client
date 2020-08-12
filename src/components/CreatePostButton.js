@@ -18,7 +18,7 @@ const CreatePostButton = (props) => {
     width: '500px',
     maxWidth: '80vw',
     margin: '20px auto',
-    backgroundColor: 'rgb(246,246,246)'
+    backgroundColor: 'rgb(249,249,249)'
   }
 
   // Renders readonly input that opens CreatePostForm component modal when clicked

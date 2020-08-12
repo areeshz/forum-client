@@ -169,12 +169,13 @@ const PostPage = (props) => {
   }
 
   const postBoxStyle = {
-    border: '1px solid black',
     margin: '25px auto 0',
     padding: '10px',
     width: '700px',
     maxWidth: '80vw',
-    borderRadius: '7px'
+    borderRadius: '7px',
+    backgroundColor: 'white',
+    boxShadow: '0 0 2px 0 #595959'
   }
 
   const titleStyle = {

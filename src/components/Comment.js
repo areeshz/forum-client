@@ -49,12 +49,13 @@ const Comment = (props) => {
   }
 
   const commentBoxStyle = {
-    border: '1px solid black',
     borderRadius: '15px',
     width: '500px',
     maxWidth: '80vw',
     padding: '10px 15px',
-    marginTop: '12px'
+    marginTop: '12px',
+    backgroundColor: 'white',
+    boxShadow: '0 0 2px 0 #595959'
   }
 
   const bodyStyle = {

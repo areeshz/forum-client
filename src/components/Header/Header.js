@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import logo from './logo.png'
 
 const authenticatedOptions = (
   <Fragment>
@@ -33,10 +34,28 @@ const alwaysOptions = (
   </Fragment>
 )
 
+const navStyle = {
+  backgroundColor: '#009DAF'
+}
+
+const logoStyle = {
+  backgroundColor: 'white',
+  marginRight: '10px',
+  borderRadius: '5px'
+}
+
+const brandStyle = {
+  display: 'flex',
+  alignItems: 'center'
+}
+
 const Header = ({ user }) => (
-  <Navbar bg="primary" variant="dark" expand="md">
+  <Navbar style={navStyle} variant="dark" expand="md">
     <Navbar.Brand href="#">
-      Forum Client
+      <div style={brandStyle}>
+        <img src={logo} height='30' style={logoStyle}/>
+        {'Let\'s Talk!'}
+      </div>
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
